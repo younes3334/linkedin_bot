@@ -2,6 +2,7 @@
 # if the libraries were not installed, they will be installed automatically
 try:
     import pandas as pd
+    import numpy as np
     import openpyxl
     from webdriver_manager.chrome import ChromeDriverManager
     from selenium.webdriver import Chrome
@@ -54,6 +55,10 @@ def scrape_connections(driver, wait):
     driver.get(MY_CONNECTIONS_LINK)
     wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '.mn-connection-card')))
 
+    number_of_connections = driver.find_element_by_css_selector("#ember30 .t-black.t-normal").text
+    print("\nThere are ",number_of_connections)
+    print("--> Collecting Connections ...")
+
     total_connections_text = driver.find_element_by_css_selector('.mn-connections').text
     total_connections = int(re.search(r'(\d+)', total_connections_text).group(1))
 
@@ -73,6 +78,7 @@ def get_all_connections(driver,wait):
         connection['Profile link'] = connection_link
         connection['id'] = re.search(
             r'/in/(.*?)/', connection_link).group(1)
+        print('\t',connection['name'],' is collected')
         connections.append(connection)
 
     return connections
@@ -144,8 +150,10 @@ if __name__ == '__main__':
     # Linkedin account info
     print("\n\t *** Linkedin account information : ***")
     
-    email = input("\n\t ---> Enter the email/user account : ")
-    password = input("\t ---> Enter the password : ")
+    email = 'touzani.zakari@gmail.com'
+    password = 'TouzaniZa2113'
+    #email = input("\n\t ---> Enter the email/user account : ")
+    #password = input("\t ---> Enter the password : ")
 
 
     time.sleep(2)
@@ -182,7 +190,7 @@ if __name__ == '__main__':
 
     print("\nLogin succefully !\n")
 
-    print("\n\tCollecting Connections ...")
+
     connections_info = scrape_connections(driver,wait)
     print("\nConnections infos are collected succefully !")
     print(len(connections_info)," connections collected !")
@@ -190,11 +198,11 @@ if __name__ == '__main__':
     # convert data to an excel file
     connection_data = pd.DataFrame(connections_info)
     print(connection_data)
-    connection_data.to_excel("Connection_data.xlsx")
-
+    #connection_data.to_excel("Connection_data.xlsx")
+    connection_data.to_csv("Connection_data.txt",sep=' | ', index=False)
+    #np.savetxt(r'data_v1.txt',connection_data.values, fmt='%d')
     driver.close()
-  
-
+    
 
 
 
