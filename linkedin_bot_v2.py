@@ -150,10 +150,8 @@ if __name__ == '__main__':
     # Linkedin account info
     print("\n\t *** Linkedin account information : ***")
     
-    email = 'touzani.zakari@gmail.com'
-    password = 'TouzaniZa2113'
-    #email = input("\n\t ---> Enter the email/user account : ")
-    #password = input("\t ---> Enter the password : ")
+    email = input("\n\t ---> Enter the email/user account : ")
+    password = input("\t ---> Enter the password : ")
 
 
     time.sleep(2)
@@ -192,18 +190,11 @@ if __name__ == '__main__':
 
 
     connections_info = scrape_connections(driver,wait)
-    print("\nConnections infos are collected succefully !")
-    print(len(connections_info)," connections collected !")
+    print("\n",len(connections_info)," connections collected succefully !\n")
   
-    # convert data to an excel file
+    # convert data to a text file
     connection_data = pd.DataFrame(connections_info)
     print(connection_data)
-    #connection_data.to_excel("Connection_data.xlsx")
-    connection_data.to_csv("Connection_data.txt",sep=' | ', index=False)
-    #np.savetxt(r'data_v1.txt',connection_data.values, fmt='%d')
+    connection_data.to_csv("Connection_data.txt",sep=';', index=False)
+
     driver.close()
-    
-
-
-
-
